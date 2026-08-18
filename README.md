@@ -46,7 +46,16 @@ Scripts-Standardverhalten, ruft intern `update_script()` auf).
 - Alle Daten liegen persistent unter `/opt/project-nomad/`.
 - Generierte Zugangsdaten (App-Key, DB-Passwörter) werden nach
   `~/nomad.creds` im Container geschrieben.
-- Standardport ist 80 (über `var_port`/Compose-Datei anpassbar).
+- Standardport ist 80 (Remapping in der Compose-Datei). Falls dein Compose-
+  Format vom Upstream mal abweicht und das Remapping nicht greift, ist Nomad
+  stattdessen unter `http://<IP>:8080` erreichbar.
+- Die Installations- und Update-Logik lädt `compose.yml`, `start_nomad.sh`,
+  `stop_nomad.sh` und `update_nomad.sh` **direkt vom `main`-Branch** des
+  offiziellen [project-nomad](https://github.com/Crosstalk-Solutions/project-nomad)
+  Repos (kein GitHub-Release-Tarball, da dafür keine Release-Assets
+  veröffentlicht werden). Das Update-Kommando (`update_script` in `ct/nomad.sh`)
+  macht ein `docker compose pull` + `up -d --force-recreate` gegen die
+  bestehende `compose.yml` – analog zum offiziellen `update_nomad.sh`.
 
 ## Lizenz & Attribution
 

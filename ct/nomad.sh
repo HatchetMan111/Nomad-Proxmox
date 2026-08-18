@@ -32,42 +32,16 @@ function update_script() {
   check_container_storage
   check_container_resources
 
-  if [[ ! -d /opt/project-nomad ]]; then
+  if [[ ! -f /opt/project-nomad/compose.yml ]]; then
     msg_error "No ${APP} Installation Found!"
     exit
   fi
 
-  if check_for_gh_release "nomad" "Crosstalk-Solutions/project-nomad"; then
-    msg_info "Updating $APP"
-    cd /opt/project-nomad || exit
-
-    APP_KEY=$(grep 'APP_KEY=' compose.yml | head -1 | sed 's/.*APP_KEY=//')
-    DB_PASS=$(grep 'DB_PASSWORD=' compose.yml | head -1 | sed 's/.*DB_PASSWORD=//')
-    DB_ROOT_PASS=$(grep 'MYSQL_ROOT_PASSWORD=' compose.yml | head -1 | sed 's/.*MYSQL_ROOT_PASSWORD=//')
-    DB_USER_PASS=$(grep 'MYSQL_PASSWORD=' compose.yml | head -1 | sed 's/.*MYSQL_PASSWORD=//')
-    NOMAD_URL=$(grep 'URL=' compose.yml | head -1 | sed 's/.*URL=//')
-
-    fetch_and_deploy_gh_release "nomad" "Crosstalk-Solutions/project-nomad" "tarball"
-
-    cp /opt/nomad/install/management_compose.yaml compose.yml
-    cp /opt/nomad/install/start_nomad.sh start_nomad.sh
-    cp /opt/nomad/install/stop_nomad.sh stop_nomad.sh
-    cp /opt/nomad/install/update_nomad.sh update_nomad.sh
-    chmod +x ./*.sh
-
-    sed -i "s|URL=replaceme|URL=${NOMAD_URL}|g" compose.yml
-    [[ -n "$APP_KEY" ]] && sed -i "s|APP_KEY=replaceme|APP_KEY=${APP_KEY}|g" compose.yml
-    [[ -n "$DB_PASS" ]] && sed -i "s|DB_PASSWORD=replaceme|DB_PASSWORD=${DB_PASS}|g" compose.yml
-    [[ -n "$DB_ROOT_PASS" ]] && sed -i "s|MYSQL_ROOT_PASSWORD=replaceme|MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}|g" compose.yml
-    [[ -n "$DB_USER_PASS" ]] && sed -i "s|MYSQL_PASSWORD=replaceme|MYSQL_PASSWORD=${DB_USER_PASS}|g" compose.yml
-    sed -i 's|"8080:8080"|"80:8080"|g' compose.yml
-
-    $STD docker compose pull
-    $STD docker compose up -d --force-recreate
-    msg_ok "Updated $APP"
-  else
-    msg_ok "No update required"
-  fi
+  msg_info "Updating $APP"
+  cd /opt/project-nomad || exit
+  $STD docker compose -p project-nomad -f compose.yml pull
+  $STD docker compose -p project-nomad -f compose.yml up -d --force-recreate
+  msg_ok "Updated $APP"
   exit
 }
 
