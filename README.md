@@ -15,14 +15,14 @@ vorsieht.
 ## Installation (Proxmox VE Host-Shell)
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/<GITHUB_USERNAME>/<REPO_NAME>/main/ct/nomad.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/HatchetMan111/Nomad-Proxmox/main/ct/nomad.sh)"
 ```
 
 Optional mit angepassten Defaults, z. B.:
 
 ```bash
 var_cpu=4 var_ram=8192 var_disk=64 \
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/<GITHUB_USERNAME>/<REPO_NAME>/main/ct/nomad.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/HatchetMan111/Nomad-Proxmox/main/ct/nomad.sh)"
 ```
 
 ## Update

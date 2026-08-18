@@ -2,8 +2,8 @@
 source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/build.func)
 
 # Copyright (c) 2021-2026 community-scripts ORG
-# Author: <GITHUB_USERNAME>
-# License: MIT | https://github.com/<GITHUB_USERNAME>/<REPO_NAME>/raw/main/LICENSE
+# Author: HatchetMan111
+# License: MIT | https://github.com/HatchetMan111/Nomad-Proxmox/raw/main/LICENSE
 #
 # App source (Apache-2.0):   https://github.com/Crosstalk-Solutions/project-nomad
 # App website:                https://www.projectnomad.us
