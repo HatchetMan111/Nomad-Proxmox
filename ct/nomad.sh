@@ -32,15 +32,13 @@ function update_script() {
   check_container_storage
   check_container_resources
 
-  if [[ ! -f /opt/project-nomad/compose.yml ]]; then
+  if ! pct exec "$CTID" -- test -f /opt/project-nomad/compose.yml; then
     msg_error "No ${APP} Installation Found!"
     exit
   fi
 
   msg_info "Updating $APP"
-  cd /opt/project-nomad || exit
-  $STD docker compose -p project-nomad -f compose.yml pull
-  $STD docker compose -p project-nomad -f compose.yml up -d --force-recreate
+  pct exec "$CTID" -- bash -c "cd /opt/project-nomad && docker compose -p project-nomad -f compose.yml pull && docker compose -p project-nomad -f compose.yml up -d --force-recreate"
   msg_ok "Updated $APP"
   exit
 }
@@ -48,6 +46,17 @@ function update_script() {
 start
 build_container
 description
+
+# build.func's own automatic install-fetch is hardcoded to
+# community-scripts/ProxmoxVE's repo (not ours), so for a third-party app
+# like Nomad it silently 404s and no-ops instead of erroring. We therefore
+# run our real install script explicitly against the freshly created
+# container instead of relying on that built-in mechanism.
+echo -e "${INFO}${YW} Installing Nomad inside the container (this can take a few minutes)...${CL}"
+if ! pct exec "$CTID" -- bash -c "$(curl -fsSL https://raw.githubusercontent.com/HatchetMan111/Nomad-Proxmox/main/install/nomad-install.sh)"; then
+  msg_error "Nomad installation failed inside the container - see the output above for details."
+  exit 1
+fi
 
 msg_ok "Completed Successfully!\n"
 echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"

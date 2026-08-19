@@ -65,6 +65,14 @@ Scripts-Standardverhalten, ruft intern `update_script()` auf).
 - Jeder kritische Installationsschritt bricht bei Fehlern jetzt sichtbar mit
   einer klaren Fehlermeldung ab, statt stillschweigend "erfolgreich"
   weiterzulaufen.
+- **Wichtig:** Das offizielle `build.func` versucht intern automatisch, ein
+  Install-Script von `community-scripts/ProxmoxVE` selbst zu laden
+  (`install/${var_install}.sh`). Für Drittanbieter-Apps wie Nomad, die dort
+  nicht existieren, schlägt das mit einem 404 fehl – curl liefert dabei
+  leeren Output, wodurch intern ein No-Op ausgeführt wird, statt eines
+  sichtbaren Fehlers. `ct/nomad.sh` umgeht das, indem es unser eigenes
+  Install-Script nach der Container-Erstellung explizit per `pct exec`
+  ausführt, statt sich auf diesen Auto-Fetch zu verlassen.
 
 ## Lizenz & Attribution
 
