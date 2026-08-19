@@ -13,7 +13,7 @@ source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxV
 # release instead of depending on unverified helper functions.
 
 color
-verb_ip
+verb_ip6
 catch_errors
 setting_up_container
 network_check
@@ -155,3 +155,4 @@ msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"
+cleanup_lxc
