@@ -56,6 +56,15 @@ Scripts-Standardverhalten, ruft intern `update_script()` auf).
   veröffentlicht werden). Das Update-Kommando (`update_script` in `ct/nomad.sh`)
   macht ein `docker compose pull` + `up -d --force-recreate` gegen die
   bestehende `compose.yml` – analog zum offiziellen `update_nomad.sh`.
+- Docker wird über das offizielle Docker-Convenience-Script (`get.docker.com`)
+  installiert statt über Framework-Helper – funktioniert damit unabhängig
+  vom genauen Debian-Codenamen zuverlässig.
+- Container läuft standardmäßig auf **Debian 12 (bookworm)**, da Docker's
+  APT-Repo neuere Debian-Codenamen (z. B. 13/trixie) teils erst mit
+  Verzögerung unterstützt.
+- Jeder kritische Installationsschritt bricht bei Fehlern jetzt sichtbar mit
+  einer klaren Fehlermeldung ab, statt stillschweigend "erfolgreich"
+  weiterzulaufen.
 
 ## Lizenz & Attribution
 
